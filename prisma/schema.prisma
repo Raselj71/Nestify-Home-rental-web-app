@@ -18,11 +18,11 @@ datasource db {
 
 model Users{
   id String @id @default(uuid()) 
-  email String ? @unique
-  phone String  @unique
+  email String  @unique
+  phone String  ?@unique
   password String 
-  firstName String
-  lastName String
+  firstName String ?
+  lastName String ?
   fcm_token String ?
   avatar String?
   property Property[]

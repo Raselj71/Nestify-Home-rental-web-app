@@ -12,22 +12,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useActionState } from "react"
-import { LoginAction } from "@/action"
-import { toast } from "sonner"
+import { SignupAction } from "@/action"
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
 
-   const[state,formAction,isPending]= useActionState(LoginAction, undefined)
+   const[state,formAction,isPending]= useActionState(SignupAction, undefined)
   
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Signup</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
@@ -35,6 +34,16 @@ export function LoginForm({
         <CardContent>
           <form action={formAction}>
             <div className="flex flex-col gap-6">
+            <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  type="name"
+                  placeholder="rasel "
+                  required
+                  name="name"
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -49,20 +58,20 @@ export function LoginForm({
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                   <Link  className="ml-auto inline-block text-sm underline-offset-4 hover:underline" href={'/auth/forget-password'}>Forget Passowrd</Link>
+                   
                 </div>
                 <Input id="password" type="password" name="password" required />
                 {state?.errors?.password && <p className="text-xs text-red-500">{state.errors.password}</p>}
                 {state?.message && <p className="text-xs text-red-500">{state.message}</p>}
               </div>
               <Button type="submit" className="w-full bg-green-700">
-                {isPending? "Loading..." :"Login"}
+                {isPending? "Loading..." :"Signup"}
               </Button>
             
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link className="underline underline-offset-4" href={'/auth/signup'}> Sign up</Link>
+              Already have an account?{" "}
+              <Link className="underline underline-offset-4" href={'/auth/login'}> Login</Link>
             </div>
           </form>
         </CardContent>
