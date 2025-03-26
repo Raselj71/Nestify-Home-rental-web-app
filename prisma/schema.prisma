@@ -16,6 +16,88 @@ datasource db {
 }
         
 
-model User{
-  id Int @id @default(autoincrement())
+model Users{
+  id String @id @default(uuid()) 
+  email String ? @unique
+  phone String  @unique
+  password String 
+  firstName String
+  lastName String
+  fcm_token String ?
+  avatar String?
+  property Property[]
+  role user_role @default(USER)
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+
 }   
+
+model Property{
+  id String @id @default(uuid()) 
+  title String 
+  summary String?
+  address Address?
+  userId String
+  user Users @relation(fields: [userId],references: [id],onDelete: SetDefault)
+  images String[] 
+  price Int
+  basic_info info ?
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+  
+  
+
+
+
+  
+}
+
+enum property_type{
+  FAMILY
+  BACHELOR
+  OFFICE
+  SUBLET
+  HOSTEL
+  SHOP
+}
+
+model info{
+  id String @id @default(uuid()) 
+  bedroom Int 
+  bathroom Int
+  area Int ?
+  available DateTime?
+  floor_no Int?
+  category property_type
+  gender gender
+  propertyId String @unique
+  property Property @relation(fields: [propertyId],references: [id], onDelete: SetDefault)
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+model Address{
+  id String @id @default(uuid()) 
+  division String
+  district String
+  upzila String
+  map String ?
+
+  propertyId String @unique
+  property Property @relation(fields: [propertyId],references: [id],onDelete: SetDefault)
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+
+
+ 
+}
+
+enum gender{
+  MALE
+  FEMALE
+}
+
+enum user_role {
+  ADMIN
+  USER
+}
+
