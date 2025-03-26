@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useActionState } from "react"
 import { loginAction } from "@/action"
+import { toast } from "sonner"
 
 export function LoginForm({
   className,
@@ -20,6 +21,7 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
 
    const[state,formAction,isPending]= useActionState(loginAction, undefined)
+  
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -51,17 +53,16 @@ export function LoginForm({
                 </div>
                 <Input id="password" type="password" name="password" required />
                 {state?.errors?.password && <p className="text-xs text-red-500">{state.errors.password}</p>}
+                {state?.message && <p className="text-xs text-red-500">{state.message}</p>}
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full bg-green-700">
                 {isPending? "Loading" :"Login"}
               </Button>
             
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
+              <Link className="underline underline-offset-4" href={'/auth/signup'}> Sign up</Link>
             </div>
           </form>
         </CardContent>
