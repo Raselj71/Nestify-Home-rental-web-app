@@ -17,12 +17,11 @@ datasource db {
         
 
 model Users{
-  id String @id @default(uuid()) 
+  id String @id @default(uuid()) @db.Uuid
   email String  @unique
   phone String  ?@unique
-  password String 
-  firstName String ?
-  lastName String ?
+  
+  fullName String ?
   fcm_token String ?
   avatar String?
   property Property[]
@@ -33,12 +32,12 @@ model Users{
 }   
 
 model Property{
-  id String @id @default(uuid()) 
+  id String @id @default(uuid()) @db.Uuid
   title String 
   summary String?
   address Address?
-  userId String
-  user Users @relation(fields: [userId],references: [id],onDelete: SetDefault)
+  userId String @db.Uuid
+  user Users @relation(fields: [userId],references: [id],onDelete: Cascade)
   images String[] 
   price Int
   basic_info info ?
@@ -62,7 +61,7 @@ enum property_type{
 }
 
 model info{
-  id String @id @default(uuid()) 
+  id String @id @default(uuid()) @db.Uuid
   bedroom Int 
   bathroom Int
   area Int ?
@@ -70,19 +69,19 @@ model info{
   floor_no Int?
   category property_type
   gender gender
-  propertyId String @unique
-  property Property @relation(fields: [propertyId],references: [id], onDelete: SetDefault)
+  propertyId String @db.Uuid @unique
+  property Property @relation(fields: [propertyId],references: [id])
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt()
 }
 model Address{
-  id String @id @default(uuid()) 
+  id String @id @default(uuid()) @db.Uuid
   division String
   district String
   upzila String
   map String ?
 
-  propertyId String @unique
+  propertyId String @db.Uuid @unique
   property Property @relation(fields: [propertyId],references: [id],onDelete: SetDefault)
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt()

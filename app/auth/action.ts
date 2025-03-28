@@ -1,9 +1,10 @@
 'use server'
 
 import { redirect } from "next/navigation"
-import { LoginFormState, LoginFormSchema, SingupFormState, SignupFormSchema } from "./lib/Schema"
-import { supabaseServerClient } from "./utils/supabase/ServerClient"
-import { prisma } from "./config/Prisma"
+import { LoginFormState, LoginFormSchema, SingupFormState, SignupFormSchema } from "../../lib/Schema"
+import { supabaseServerClient } from "../../utils/supabase/ServerClient"
+import { prisma } from "../../config/Prisma"
+import { revalidatePath } from "next/cache"
 
 export const LoginAction=async(state: LoginFormState, formData: FormData)=>{
    const supabase= await supabaseServerClient()
@@ -71,7 +72,7 @@ export const SignupAction=async(state: SingupFormState, formData: FormData)=>{
         data:{
           id:supaUser.id,
           email,
-          password
+          fullName:name
         }
        })
     }
@@ -79,5 +80,17 @@ export const SignupAction=async(state: SingupFormState, formData: FormData)=>{
     redirect('/auth/login')
 
      
+
+}
+
+export const logout=async()=>{
+
+  const supabase=await supabaseServerClient()
+  const {error}=await supabase.auth.signOut()
+  if(error){
+    throw new Error(error.message)
+  }
+  revalidatePath('/','page')
+  redirect('/auth/login')
 
 }

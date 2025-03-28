@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useActionState } from "react"
-import { LoginAction } from "@/action"
+import { LoginAction } from "@/app/auth/action"
 import { toast } from "sonner"
 
 export function LoginForm({
