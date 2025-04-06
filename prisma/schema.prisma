@@ -4,20 +4,17 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
-        
 
 model Users{
-  id String @id @default(uuid()) @db.Uuid
+  id  String   @id @default(auto()) @map("_id") @db.ObjectId
   email String  @unique
   phone String  ?@unique
   
@@ -32,11 +29,11 @@ model Users{
 }   
 
 model Property{
-  id String @id @default(uuid()) @db.Uuid
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title String 
   summary String?
   address Address?
-  userId String @db.Uuid
+  userId String 
   user Users @relation(fields: [userId],references: [id],onDelete: Cascade)
   images String[] 
   price Int
@@ -61,7 +58,7 @@ enum property_type{
 }
 
 model info{
-  id String @id @default(uuid()) @db.Uuid
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   bedroom Int 
   bathroom Int
   area Int ?
@@ -69,20 +66,20 @@ model info{
   floor_no Int?
   category property_type
   gender gender
-  propertyId String @db.Uuid @unique
+  propertyId String @unique
   property Property @relation(fields: [propertyId],references: [id])
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt()
 }
 model Address{
-  id String @id @default(uuid()) @db.Uuid
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   division String
   district String
   upzila String
   map String ?
 
-  propertyId String @db.Uuid @unique
-  property Property @relation(fields: [propertyId],references: [id],onDelete: SetDefault)
+  propertyId String @unique
+  property Property @relation(fields: [propertyId],references: [id])
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt()
 
@@ -99,4 +96,3 @@ enum user_role {
   ADMIN
   USER
 }
-

@@ -70,7 +70,7 @@ export const SignupAction=async(state: SingupFormState, formData: FormData)=>{
     if(supaUser){
       const User= await prisma.users.create({
         data:{
-          id:supaUser.id,
+          
           email,
           fullName:name
         }

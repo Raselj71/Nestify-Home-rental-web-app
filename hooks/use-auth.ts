@@ -1,42 +1,31 @@
 import { prisma } from "@/config/Prisma";
-import { supabaseBrowserClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
+import { User } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
- function useAuth() {
-  const supabase = supabaseBrowserClient();
-  const {data,isLoading} = useQuery({
-    queryKey: ["auth-data"],
+type MergedUser = User ;
+
+export function useAuth() {
+  const supabase = createClient();
+
+  const { data: user, isLoading } = useQuery<MergedUser | null>({
+    queryKey: ["auth-user"],
     queryFn: async () => {
-      
+      const { data: authData, error: authError } =
+        await supabase.auth.getUser();
 
-      const{data:authData,error:AuthError}=   await supabase.auth.getUser()
+        console.log("authUser:", authData)
 
+      if (authError || !authData.user) {
+        return null;
+      }
      
-
-      if(AuthError){
-        return null
-      }
-
-      console.log('supabase auth user:',authData)
-
-      const {data:User,error}=await supabase.from('Users').select().eq('email',authData.user.email).single()
-
-      console.log("prisma User:",User)
+    
 
       
-      if(!User || error){
-        return null
-      }
-
-      return{...authData,...User}
+      return { ...authData.user };
     },
   });
 
-  return{
-    data, loading:isLoading
-
-  }
+  return { user, loading: isLoading };
 }
-
-export default useAuth;
