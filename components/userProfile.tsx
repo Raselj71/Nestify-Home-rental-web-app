@@ -12,7 +12,7 @@ import { DropdownMenuContent } from "./ui/dropdown-menu";
 import Signout from "./Signout";
 import { UserIcon } from "lucide-react";
 
-function Profile() {
+function UserProfile() {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -58,4 +58,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default UserProfile;
