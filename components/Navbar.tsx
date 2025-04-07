@@ -3,7 +3,7 @@ import Link from 'next/link'
 import nestify from '@/public/nestify.png'
 import Image from 'next/image'
 import { Button } from './ui/button'
-import Profile from './userProfile'
+import UserProfile from './userProfile'
 function Navbar() {
   return (
     <div className='flex  justify-between mx-auto'>
@@ -21,7 +21,7 @@ function Navbar() {
 
              </Button>
 
-             <Profile/>
+             <UserProfile/>
             
         </div>
 
